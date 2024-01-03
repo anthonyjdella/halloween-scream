@@ -8,4 +8,4 @@
 
 ## The app
 
-Text <a href="sms:+19403948137?body=Try%20me.">+1 (940) 394-8137</a>
+Text <a href="sms:+18444973678?body=Try%20me.">+1 (844) 497-3678</a>
