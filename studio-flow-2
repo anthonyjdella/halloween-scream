@@ -1,0 +1,664 @@
+{
+  "description": "A New Flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingConversationMessage"
+        },
+        {
+          "next": "delay_6sec",
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "name": "you_hang_up_on_me_and_ill_cut_you_like_a_fish",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "split_4",
+          "event": "keypress"
+        },
+        {
+          "next": "split_4",
+          "event": "speech"
+        },
+        {
+          "next": "split_4",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://do-you-like-scary-movies-2186.twil.io/youhanguponmeillcutyoulikeafish.mp3",
+        "speech_timeout": "auto",
+        "offset": {
+          "x": -330,
+          "y": 1980
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "stop_gather": false,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 2
+      }
+    },
+    {
+      "name": "you_listen_you_little_bitch",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "",
+        "offset": {
+          "x": -730,
+          "y": 1520
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "delay_6sec",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "delay_6sec_2",
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "ZSfc4c664892ee5167a032ff357cbb0fb7",
+        "environment_sid": "ZE57718b18579d4cb2f579e3b45d8603c7",
+        "offset": {
+          "x": 230,
+          "y": 270
+        },
+        "function_sid": "ZHf97bd22e392f6c71a994b3cafce23728",
+        "url": "https://do-you-like-scary-movies-2186.twil.io/delay"
+      }
+    },
+    {
+      "name": "call_user_1",
+      "type": "make-outgoing-call-v2",
+      "transitions": [
+        {
+          "next": "gather_1",
+          "event": "answered"
+        },
+        {
+          "event": "busy"
+        },
+        {
+          "event": "noAnswer"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "machine_detection_speech_threshold": "2400",
+        "detect_answering_machine": false,
+        "send_digits": "",
+        "sip_auth_username": "",
+        "offset": {
+          "x": 250,
+          "y": 560
+        },
+        "recording_status_callback": "",
+        "sip_auth_password": "",
+        "recording_channels": "mono",
+        "timeout": 60,
+        "machine_detection": "Enable",
+        "trim": "true",
+        "record": false,
+        "machine_detection_speech_end_threshold": "1200",
+        "machine_detection_timeout": "30",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "machine_detection_silence_timeout": "5000"
+      }
+    },
+    {
+      "name": "send_text",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1190,
+          "y": 3070
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Can you see me?",
+        "media_url": "https://do-you-like-scary-movies-2186.twil.io/giphy2.gif"
+      }
+    },
+    {
+      "name": "split_4",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "i_wanna_talk_to_you_for_a_second_2",
+          "event": "noMatch"
+        },
+        {
+          "next": "i_wanna_talk_to_you_for_a_second_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "Sorry",
+              "arguments": [
+                "{{widgets.you_hang_up_on_me_and_ill_cut_you_like_a_fish.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "Sorry"
+            }
+          ]
+        },
+        {
+          "next": "i_wanna_talk_to_you_for_a_second_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "Okay",
+              "arguments": [
+                "{{widgets.you_hang_up_on_me_and_ill_cut_you_like_a_fish.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "Okay"
+            }
+          ]
+        },
+        {
+          "next": "i_wanna_talk_to_you_for_a_second_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "Alright",
+              "arguments": [
+                "{{widgets.you_hang_up_on_me_and_ill_cut_you_like_a_fish.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "Alright"
+            }
+          ]
+        },
+        {
+          "next": "i_wanna_talk_to_you_for_a_second_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "Yes, Yeah, Yep",
+              "arguments": [
+                "{{widgets.you_hang_up_on_me_and_ill_cut_you_like_a_fish.SpeechResult}}"
+              ],
+              "type": "matches_any_of",
+              "value": "Yes, Yeah, Yep"
+            }
+          ]
+        },
+        {
+          "next": "if_you_hang_up_3",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "No",
+              "arguments": [
+                "{{widgets.you_hang_up_on_me_and_ill_cut_you_like_a_fish.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "No"
+            }
+          ]
+        },
+        {
+          "next": "if_you_hang_up_3",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "Bye",
+              "arguments": [
+                "{{widgets.you_hang_up_on_me_and_ill_cut_you_like_a_fish.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "Bye"
+            }
+          ]
+        },
+        {
+          "next": "if_you_hang_up_3",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "Hang",
+              "arguments": [
+                "{{widgets.you_hang_up_on_me_and_ill_cut_you_like_a_fish.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "Hang"
+            }
+          ]
+        },
+        {
+          "next": "if_you_hang_up_3",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "Fuck",
+              "arguments": [
+                "{{widgets.you_hang_up_on_me_and_ill_cut_you_like_a_fish.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "Fuck"
+            }
+          ]
+        },
+        {
+          "next": "if_you_hang_up_3",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "Bitch",
+              "arguments": [
+                "{{widgets.you_hang_up_on_me_and_ill_cut_you_like_a_fish.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "Bitch"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.you_hang_up_on_me_and_ill_cut_you_like_a_fish.SpeechResult}}",
+        "offset": {
+          "x": -390,
+          "y": 2360
+        }
+      }
+    },
+    {
+      "name": "i_wanna_talk_to_you_for_a_second_2",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "can_you_handle_that",
+          "event": "keypress"
+        },
+        {
+          "next": "can_you_handle_that",
+          "event": "speech"
+        },
+        {
+          "next": "can_you_handle_that",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://do-you-like-scary-movies-2186.twil.io/iwannatalktoyouforasecond.mp3",
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 250,
+          "y": 2660
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "stop_gather": false,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 0
+      }
+    },
+    {
+      "name": "can_you_handle_that",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "can_you_see_me_",
+          "event": "keypress"
+        },
+        {
+          "next": "can_you_see_me_",
+          "event": "speech"
+        },
+        {
+          "next": "can_you_see_me_",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://do-you-like-scary-movies-2186.twil.io/canyouhandlethat.mp3",
+        "speech_timeout": "auto",
+        "offset": {
+          "x": -90,
+          "y": 3020
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "stop_gather": false,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 2
+      }
+    },
+    {
+      "name": "gather_1",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "you_hang_up_on_me_and_ill_cut_you_like_a_fish",
+          "event": "keypress"
+        },
+        {
+          "next": "split_5",
+          "event": "speech"
+        },
+        {
+          "next": "you_hang_up_on_me_and_ill_cut_you_like_a_fish",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 260,
+          "y": 880
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "stop_gather": false,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 1
+      }
+    },
+    {
+      "name": "split_5",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "you_hang_up_on_me_and_ill_cut_you_like_a_fish",
+          "event": "noMatch"
+        },
+        {
+          "next": "you_should_never_say_who_is_there",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value contains who is there",
+              "arguments": [
+                "{{widgets.gather_1.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "who is there"
+            }
+          ]
+        },
+        {
+          "next": "you_should_never_say_who_is_there",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value contains who's there",
+              "arguments": [
+                "{{widgets.gather_1.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "who's there"
+            }
+          ]
+        },
+        {
+          "next": "you_should_never_say_who_is_there",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to Who",
+              "arguments": [
+                "{{widgets.gather_1.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "Who"
+            }
+          ]
+        },
+        {
+          "next": "you_should_never_say_who_is_there",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "Who is this, who's this",
+              "arguments": [
+                "{{widgets.gather_1.SpeechResult}}"
+              ],
+              "type": "matches_any_of",
+              "value": "who is this, who's this, who is that, who's that, who is there, who's there"
+            }
+          ]
+        },
+        {
+          "next": "you_should_never_say_who_is_there",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "Who",
+              "arguments": [
+                "{{widgets.gather_1.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "Who"
+            }
+          ]
+        },
+        {
+          "next": "you_should_never_say_who_is_there",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "This",
+              "arguments": [
+                "{{widgets.gather_1.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "This"
+            }
+          ]
+        },
+        {
+          "next": "you_should_never_say_who_is_there",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "There",
+              "arguments": [
+                "{{widgets.gather_1.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "There"
+            }
+          ]
+        },
+        {
+          "next": "you_should_never_say_who_is_there",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "That",
+              "arguments": [
+                "{{widgets.gather_1.SpeechResult}}"
+              ],
+              "type": "contains",
+              "value": "That"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.gather_1.SpeechResult}}",
+        "offset": {
+          "x": -40,
+          "y": 1240
+        }
+      }
+    },
+    {
+      "name": "you_should_never_say_who_is_there",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "you_might_as_well_come_out",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://do-you-like-scary-movies-2186.twil.io/youshouldneversaywhosethere.mp3",
+        "offset": {
+          "x": 670,
+          "y": 1720
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "you_might_as_well_come_out",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "i_wanna_talk_to_you_for_a_second_2",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://do-you-like-scary-movies-2186.twil.io/youmightaswellcomeouthere.mp3",
+        "offset": {
+          "x": 710,
+          "y": 2030
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "can_you_see_me_",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "send_text",
+          "event": "keypress"
+        },
+        {
+          "next": "send_text",
+          "event": "speech"
+        },
+        {
+          "next": "send_text",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://do-you-like-scary-movies-2186.twil.io/canyouseeme.mp3",
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 470,
+          "y": 3040
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "stop_gather": false,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 0
+      }
+    },
+    {
+      "name": "if_you_hang_up_3",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "i_wanna_talk_to_you_for_a_second_2",
+          "event": "keypress"
+        },
+        {
+          "next": "i_wanna_talk_to_you_for_a_second_2",
+          "event": "speech"
+        },
+        {
+          "next": "i_wanna_talk_to_you_for_a_second_2",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://do-you-like-scary-movies-2186.twil.io/donthanguponme.mp3",
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 960,
+          "y": 2490
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "stop_gather": false,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 1
+      }
+    },
+    {
+      "name": "delay_6sec_2",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "call_user_1",
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "ZSfc4c664892ee5167a032ff357cbb0fb7",
+        "environment_sid": "ZE57718b18579d4cb2f579e3b45d8603c7",
+        "offset": {
+          "x": 830,
+          "y": 290
+        },
+        "function_sid": "ZHf97bd22e392f6c71a994b3cafce23728",
+        "url": "https://do-you-like-scary-movies-2186.twil.io/delay"
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}
